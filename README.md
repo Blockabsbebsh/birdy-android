@@ -41,4 +41,3 @@ requests network access.
 Release APKs are signed with an owner-held key that is intentionally excluded
 from this public repository. Local `assembleDebug` builds use Android's normal
 debug signing and cannot be installed as an update over a release build.
-
