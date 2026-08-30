@@ -1,7 +1,7 @@
 # Birdy for Android
 
 Birdy is a small Android app whose main feature is a responsive Jetpack Glance
-home-screen widget. It consumes the public `Blockabsbebsh/birdy-feed` feed; no
+home-screen widget. It consumes the public GitHub Pages deployment from `Blockabsbebsh/birdy-feed`; no
 Nuthatch key or other credential is present in the app.
 
 ## Automatic behavior
