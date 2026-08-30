@@ -41,3 +41,19 @@ requests network access.
 Release APKs are signed with an owner-held key that is intentionally excluded
 from this public repository. Local `assembleDebug` builds use Android's normal
 debug signing and cannot be installed as an update over a release build.
+
+## Release automation
+
+Releases are built, signature-verified, and published by
+`.github/workflows/release.yml` when `versionCode` and `versionName` are
+updated on `main`. The workflow requires these encrypted Actions secrets:
+
+- `ANDROID_KEYSTORE_BASE64`: Base64-encoded contents of the existing release
+  keystore.
+- `ANDROID_KEYSTORE_PASSWORD`
+- `ANDROID_KEY_ALIAS`
+- `ANDROID_KEY_PASSWORD`
+
+The keystore and passwords must be added under **Settings → Secrets and
+variables → Actions** and must never be committed. Pull requests run an unsigned
+debug build without access to these secrets.
