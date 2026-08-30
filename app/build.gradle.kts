@@ -11,8 +11,8 @@ android {
         applicationId = "dev.blockabsbebsh.birdy"
         minSdk = 26
         targetSdk = 36
-        versionCode = 4
-        versionName = "1.0.3"
+        versionCode = 5
+        versionName = "1.0.4"
     }
 
     buildFeatures {
@@ -24,6 +24,23 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    signingConfigs {
+        val keystorePath = System.getenv("ANDROID_KEYSTORE_PATH")
+        if (!keystorePath.isNullOrBlank()) {
+            create("release") {
+                storeFile = file(keystorePath)
+                storePassword = requireNotNull(System.getenv("ANDROID_KEYSTORE_PASSWORD"))
+                keyAlias = requireNotNull(System.getenv("ANDROID_KEY_ALIAS"))
+                keyPassword = requireNotNull(System.getenv("ANDROID_KEY_PASSWORD"))
+            }
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.findByName("release")
+        }
+    }
 }
 
 dependencies {
