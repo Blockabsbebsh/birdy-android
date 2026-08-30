@@ -80,8 +80,8 @@ class FeedStore(private val context: Context) {
     }
 
     companion object {
-        const val FEED_URL = "https://raw.githubusercontent.com/Blockabsbebsh/birdy-feed/feed/latest.json"
-        const val FEED_BASE = "https://raw.githubusercontent.com/Blockabsbebsh/birdy-feed/feed/"
+        const val FEED_URL = "https://blockabsbebsh.github.io/birdy-feed/latest.json"
+        const val FEED_BASE = "https://blockabsbebsh.github.io/birdy-feed/"
         private const val KEY_FEED = "feed_json"
     }
 }
