@@ -28,6 +28,26 @@ class FeedModelsTest {
     }
 
     @Test
+    fun olderFeedDefaultsLithuanianDisplayToEnglish() {
+        val bird = BirdFeed.parse(feedJson).birds.first()
+
+        assertEquals("One", bird.displayName(BirdLanguage.ENGLISH))
+        assertEquals("One", bird.displayName(BirdLanguage.LITHUANIAN))
+    }
+
+    @Test
+    fun parsesAndDisplaysLithuanianNameWhenAvailable() {
+        val localized = feedJson.replace(
+            "\"name\":\"One\"",
+            "\"name\":\"One\",\"nameLt\":\"Pirmas\"",
+        )
+        val bird = BirdFeed.parse(localized).birds.first()
+
+        assertEquals("One", bird.displayName(BirdLanguage.ENGLISH))
+        assertEquals("Pirmas", bird.displayName(BirdLanguage.LITHUANIAN))
+    }
+
+    @Test
     fun calculatesNextRotationBoundary() {
         val feed = BirdFeed.parse(feedJson)
 
