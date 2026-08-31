@@ -15,6 +15,14 @@ class FeedStore(private val context: Context) {
         runCatching { BirdFeed.parse(raw) }.getOrNull()
     }
 
+    fun language(): BirdLanguage = BirdLanguage.fromCode(
+        preferences.getString(KEY_LANGUAGE, BirdLanguage.ENGLISH.code),
+    )
+
+    fun setLanguage(language: BirdLanguage) {
+        preferences.edit().putString(KEY_LANGUAGE, language.code).apply()
+    }
+
     fun image(feed: BirdFeed, index: Int, family: String) =
         feed.birds.getOrNull(index)?.images?.get(family)?.let { filename ->
             val file = File(active, filename)
@@ -83,5 +91,6 @@ class FeedStore(private val context: Context) {
         const val FEED_URL = "https://blockabsbebsh.github.io/birdy-feed/latest.json"
         const val FEED_BASE = "https://blockabsbebsh.github.io/birdy-feed/"
         private const val KEY_FEED = "feed_json"
+        private const val KEY_LANGUAGE = "language"
     }
 }
