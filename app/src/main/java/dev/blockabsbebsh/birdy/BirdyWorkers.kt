@@ -41,6 +41,14 @@ class RotationWorker(context: Context, parameters: WorkerParameters) :
     }
 }
 
+class WidgetRefreshWorker(context: Context, parameters: WorkerParameters) :
+    CoroutineWorker(context, parameters) {
+    override suspend fun doWork(): Result {
+        BirdyWidget().updateAll(applicationContext)
+        return Result.success()
+    }
+}
+
 object BirdyScheduler {
     private val connected = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -64,6 +72,15 @@ object BirdyScheduler {
             .build()
         WorkManager.getInstance(context).enqueueUniqueWork(
             "birdy-feed-sync-now",
+            ExistingWorkPolicy.REPLACE,
+            request,
+        )
+    }
+
+    fun refreshWidgets(context: Context) {
+        val request = OneTimeWorkRequestBuilder<WidgetRefreshWorker>().build()
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "birdy-language-refresh",
             ExistingWorkPolicy.REPLACE,
             request,
         )
