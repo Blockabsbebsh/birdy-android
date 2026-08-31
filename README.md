@@ -17,8 +17,11 @@ Nuthatch key or other credential is present in the app.
 - Uses the prepared rectangular crop for wide widgets and the prepared square
   crop for square widgets. Unusually tall Android widgets use `Fit` so Android
   does not crop the bird a second time; empty space is the unavoidable fallback.
-- Tapping the bird name opens Wikipedia. Manual refresh is available in the app;
-  the widget's empty/loading state can also be tapped to retry its first sync.
+- Tapping the bird name opens the verified Wikipedia article supplied by the
+  feed. Lithuanian falls back to the English article when no Lithuanian article
+  exists; older feeds fall back to Wikipedia search. Manual refresh is available
+  in the app; the widget's empty/loading state can also be tapped to retry its
+  first sync.
 - The app language selector switches every Birdy widget between English and
   Lithuanian bird names. English remains the default, and older cached feeds
   without Lithuanian names automatically fall back to English.

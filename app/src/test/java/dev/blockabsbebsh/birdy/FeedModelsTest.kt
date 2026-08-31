@@ -48,6 +48,36 @@ class FeedModelsTest {
     }
 
     @Test
+    fun usesLocalizedWikipediaArticleThenFallsBackToEnglish() {
+        val localized = feedJson.replace(
+            "\"sciName\":\"Primus\"",
+            "\"sciName\":\"Primus\",\"wikipediaUrls\":{" +
+                "\"en\":\"https://en.wikipedia.org/wiki/One\"," +
+                "\"lt\":\"https://lt.wikipedia.org/wiki/Pirmas\"}",
+        )
+        val bird = BirdFeed.parse(localized).birds.first()
+
+        assertEquals("https://en.wikipedia.org/wiki/One", bird.wikipediaUrl(BirdLanguage.ENGLISH))
+        assertEquals("https://lt.wikipedia.org/wiki/Pirmas", bird.wikipediaUrl(BirdLanguage.LITHUANIAN))
+
+        val englishOnly = localized.replace(
+            ",\"lt\":\"https://lt.wikipedia.org/wiki/Pirmas\"",
+            "",
+        )
+        assertEquals(
+            "https://en.wikipedia.org/wiki/One",
+            BirdFeed.parse(englishOnly).birds.first().wikipediaUrl(BirdLanguage.LITHUANIAN),
+        )
+    }
+
+    @Test
+    fun olderFeedHasNoWikipediaArticleUrl() {
+        val bird = BirdFeed.parse(feedJson).birds.first()
+
+        assertEquals(null, bird.wikipediaUrl(BirdLanguage.LITHUANIAN))
+    }
+
+    @Test
     fun calculatesNextRotationBoundary() {
         val feed = BirdFeed.parse(feedJson)
 

@@ -16,12 +16,17 @@ data class Bird(
     val name: String,
     val lithuanianName: String,
     val scientificName: String,
+    val wikipediaUrls: Map<String, String>,
     val images: Map<String, String>,
 ) {
     fun displayName(language: BirdLanguage): String = when (language) {
         BirdLanguage.ENGLISH -> name
         BirdLanguage.LITHUANIAN -> lithuanianName.ifBlank { name }
     }
+
+    fun wikipediaUrl(language: BirdLanguage): String? =
+        wikipediaUrls[language.wikipediaLanguage]?.takeIf { it.isNotBlank() }
+            ?: wikipediaUrls[BirdLanguage.ENGLISH.wikipediaLanguage]?.takeIf { it.isNotBlank() }
 }
 
 data class BirdFeed(
@@ -59,11 +64,20 @@ data class BirdFeed(
                             put(family, imageObject.getString(family))
                         }
                     }
+                    val wikipediaObject = entry.optJSONObject("wikipediaUrls")
+                    val wikipediaUrls = buildMap {
+                        for (language in listOf("en", "lt")) {
+                            wikipediaObject?.optString(language)?.takeIf { it.isNotBlank() }?.let {
+                                put(language, it)
+                            }
+                        }
+                    }
                     add(
                         Bird(
                             name = entry.getString("name"),
                             lithuanianName = entry.optString("nameLt"),
                             scientificName = entry.optString("sciName"),
+                            wikipediaUrls = wikipediaUrls,
                             images = images,
                         )
                     )

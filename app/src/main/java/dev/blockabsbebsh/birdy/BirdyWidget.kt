@@ -65,9 +65,11 @@ class BirdyWidget : GlanceAppWidget() {
         }
 
         val query = URLEncoder.encode(displayName, StandardCharsets.UTF_8.toString())
+        val articleUrl = bird.wikipediaUrl(language)
+            ?: "https://${language.wikipediaLanguage}.wikipedia.org/wiki/Special:Search?search=$query"
         val wikipedia = Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("https://${language.wikipediaLanguage}.wikipedia.org/wiki/Special:Search?search=$query"),
+            Uri.parse(articleUrl),
         )
 
         Box(
