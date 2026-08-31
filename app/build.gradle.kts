@@ -11,8 +11,8 @@ android {
         applicationId = "dev.blockabsbebsh.birdy"
         minSdk = 26
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.0.4"
+        versionCode = 6
+        versionName = "1.1.0"
     }
 
     buildFeatures {
