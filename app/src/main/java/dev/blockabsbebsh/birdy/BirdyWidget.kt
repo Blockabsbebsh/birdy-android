@@ -44,28 +44,30 @@ class BirdyWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val store = FeedStore(context)
         val feed = store.cachedFeed()
+        val language = store.language()
         provideContent {
-            if (feed == null) LoadingWidget() else BirdWidget(store, feed)
+            if (feed == null) LoadingWidget() else BirdWidget(store, feed, language)
         }
     }
 
     @Composable
-    private fun BirdWidget(store: FeedStore, feed: BirdFeed) {
+    private fun BirdWidget(store: FeedStore, feed: BirdFeed, language: BirdLanguage) {
         val size = LocalSize.current
         val family = familyFor(size)
         val isPortrait = size.width.value / size.height.value < 0.82f
         val index = feed.currentIndex()
         val bird = feed.birds[index]
+        val displayName = bird.displayName(language)
         val bitmap = store.image(feed, index, family)
         if (bitmap == null) {
             LoadingWidget()
             return
         }
 
-        val query = URLEncoder.encode(bird.name, StandardCharsets.UTF_8.toString())
+        val query = URLEncoder.encode(displayName, StandardCharsets.UTF_8.toString())
         val wikipedia = Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("https://en.wikipedia.org/wiki/Special:Search?search=$query"),
+            Uri.parse("https://${language.wikipediaLanguage}.wikipedia.org/wiki/Special:Search?search=$query"),
         )
 
         Box(
@@ -73,7 +75,7 @@ class BirdyWidget : GlanceAppWidget() {
         ) {
             Image(
                 provider = ImageProvider(bitmap),
-                contentDescription = bird.name,
+                contentDescription = displayName,
                 modifier = GlanceModifier.fillMaxSize(),
                 contentScale = if (isPortrait) ContentScale.Fit else ContentScale.Crop,
             )
@@ -88,7 +90,7 @@ class BirdyWidget : GlanceAppWidget() {
                         .padding(horizontal = 12.dp, vertical = 9.dp),
                 ) {
                     Text(
-                        text = bird.name,
+                        text = displayName,
                         style = TextStyle(
                             color = ColorProvider(Color.White),
                             fontWeight = FontWeight.Bold,
