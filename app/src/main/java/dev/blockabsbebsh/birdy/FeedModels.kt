@@ -3,11 +3,26 @@ package dev.blockabsbebsh.birdy
 import org.json.JSONObject
 import java.time.Instant
 
+enum class BirdLanguage(val code: String, val label: String, val wikipediaLanguage: String) {
+    ENGLISH("en", "English", "en"),
+    LITHUANIAN("lt", "Lithuanian", "lt");
+
+    companion object {
+        fun fromCode(code: String?): BirdLanguage = entries.firstOrNull { it.code == code } ?: ENGLISH
+    }
+}
+
 data class Bird(
     val name: String,
+    val lithuanianName: String,
     val scientificName: String,
     val images: Map<String, String>,
-)
+) {
+    fun displayName(language: BirdLanguage): String = when (language) {
+        BirdLanguage.ENGLISH -> name
+        BirdLanguage.LITHUANIAN -> lithuanianName.ifBlank { name }
+    }
+}
 
 data class BirdFeed(
     val generatedAt: Instant,
@@ -47,6 +62,7 @@ data class BirdFeed(
                     add(
                         Bird(
                             name = entry.getString("name"),
+                            lithuanianName = entry.optString("nameLt"),
                             scientificName = entry.optString("sciName"),
                             images = images,
                         )
