@@ -19,6 +19,9 @@ Nuthatch key or other credential is present in the app.
   does not crop the bird a second time; empty space is the unavoidable fallback.
 - Tapping the bird name opens Wikipedia. Manual refresh is available in the app;
   the widget's empty/loading state can also be tapped to retry its first sync.
+- The app language selector switches every Birdy widget between English and
+  Lithuanian bird names. English remains the default, and older cached feeds
+  without Lithuanian names automatically fall back to English.
 
 The app's **Check GitHub feed for updates** button only performs an unauthenticated
 GET of the public `latest.json`. It cannot start a GitHub Actions workflow. When
